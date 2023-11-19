@@ -2,7 +2,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import ListContacts from "./ListContacts";
 import { Component } from "react";
-import * as ContactAPI from "./utils/ContactsAPI";
+import * as ContactsAPI from "./utils/ContactsAPI";
 import CreateContact from "./CreateContact";
 import { Route, Routes } from "react-router-dom";
 
@@ -11,7 +11,7 @@ class App extends Component {
     contacts: [],
   };
   componentDidMount() {
-    ContactAPI.getAll().then((contacts) => {
+    ContactsAPI.getAll().then((contacts) => {
       this.setState(() => ({ contacts }));
     });
   }
@@ -21,7 +21,15 @@ class App extends Component {
         return c.id != contact.id;
       }),
     }));
-    ContactAPI.remove(contact);
+    ContactsAPI.remove(contact);
+  };
+
+  createContact = (contact) => {
+    ContactsAPI.create(contact).then((contact) => {
+      this.setState((currentState) => ({
+        contacts: currentState.contacts.concat([contact]),
+      }));
+    });
   };
   render() {
     return (
@@ -37,7 +45,16 @@ class App extends Component {
               />
             }
           />
-          <Route path="/create" Component={CreateContact} />
+          <Route
+            path="/create"
+            element={
+              <CreateContact
+                onCreateContact={(contact) => {
+                  this.createContact(contact);
+                }}
+              />
+            }
+          />
         </Routes>
       </div>
     );
