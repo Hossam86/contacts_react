@@ -17,7 +17,7 @@ class ListContacts extends Component {
 
   render() {
     const { query } = this.state;
-    const { contacts, onDeleteContact } = this.props;
+    const { contacts, onDeleteContact, onNavigate } = this.props;
     const showingContacts = contacts.filter((c) =>
       c.name.toLowerCase().includes(query.toLowerCase())
     );
@@ -34,6 +34,7 @@ class ListContacts extends Component {
               this.updateQuery(event.target.value);
             }}
           ></input>
+          <a href="#create" onClick={onNavigate} className="add-contact"></a>
         </div>
         <ol className="contact-list">
           {showingContacts.map((contact) => (
